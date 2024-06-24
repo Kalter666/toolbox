@@ -32,14 +32,18 @@ elif [ "$#" -gt 2 ] && [ "$3"!= "-d" ]; then
     exit 1
 fi
 
-# Generate markdown content for each image sorted by filename
+# Generate markdown content for each image wrapped in divs, sorted by filename
 if [ "$MAIN_SORT_ORDER" == "ascending" ]; then
     ls -v "$DIR_PATH"/*.jpg | tail -n +2 | while read -r img; do
-        echo "![]($img)" >> "$MD_FILE"
+        BASENAME=$(basename "$img")
+        ALT_TEXT="${BASENAME%.*}" # Extracts the base name excluding the extension
+        echo "<div><img src=\"$img\" alt=\"$ALT_TEXT\"></div>" >> "$MD_FILE"
     done
 else
     ls -vr "$DIR_PATH"/*.jpg | tail -n +2 | while read -r img; do
-        echo "![]($img)" >> "$MD_FILE"
+        BASENAME=$(basename "$img")
+        ALT_TEXT="${BASENAME%.*}" # Extracts the base name excluding the extension
+        echo "<div><img src=\"$img\" alt=\"$ALT_TEXT\"></div>" >> "$MD_FILE"
     done
 fi
 
